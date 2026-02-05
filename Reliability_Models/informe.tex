@@ -1,0 +1,352 @@
+\documentclass{scrartcl}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\title{Análisis Probabilístico de Fallos y Modelos Estocásticos}
+\subtitle{Informe Técnico - Probabilidad y Estadística}
+\author{Camilo Aranda}
+\date{}
+\begin{document}
+\maketitle
+\section*{Ejercicio 1}
+
+
+\textbf{Datos:} \\
+$P(A_i) = \text{Probabilidad de averia del disipador } i$ \\
+$R_i = \text{no hay averia en el disipador }    i$ \\
+$P(A_1) = 0,6 \quad \rightarrow \quad R_1 = 0,4$ \\
+$P(A_2) = 0,2 \quad \rightarrow \quad R_2 = 0,8$ \\
+$P(A_3) = 0,3 \quad \rightarrow \quad R_3 = 0,7$ \\
+$P(A_4) = 0,3 \quad \rightarrow \quad R_4 = 0,7$
+
+\subsection*{a) Conexión en serie}
+
+Para que el generador se desconecte en serie, basta con que falle al menos uno de los componentes. Dado que son independientes, es más sencillo calcular la probabilidad de que todo funcione y restárselo a 1:
+
+$$
+\begin{aligned}
+P(\text{Fallo}) &= 1 - P(\text{Todos funcionen}) \\
+P(\text{Fallo}) &= 1 - (R_1 \cdot R_2 \cdot R_3 \cdot R_4) \\
+P(\text{Fallo}) &= 1 - (0,4 \cdot 0,8 \cdot 0,7 \cdot 0,7) \\
+P(\text{Fallo}) &= 1 - 0,1568 \\
+P(\text{Fallo}) &= \mathbf{0,8432}
+\end{aligned} \\
+$$
+\textbf{Finalmente la probabilidad de que el generador este completamente desconectado si todos los disipadores estan en serie es: $0,8432$} \\
+
+\subsection*{b) Conexión en paralelo}
+Para que el generador se desconecte en paralelo, es necesario que fallen ambas ramas en paralelo, para que esto suceda es necesario que falle solo 1 de los disipadores que estan en serie en cada rama.
+\begin{figure}[H]
+    \centering
+    % Asegúrate de que "diagrama.png" esté en la misma carpeta que este archivo .tex
+    \includegraphics[width=0.6\linewidth]{diagrama.png}
+    \caption{Esquema de conexión de los disipadores}
+\end{figure}
+$$
+\begin{aligned}
+\text{Rama Superior (A: 1 y 3):} \\
+P(F_A) &= 1 - (R_1 \cdot R_3) \\
+P(F_A) &= 1 - (0,4 \cdot 0,7) = 1 - 0,28 = \mathbf{0,72} \\
+\\
+\text{Rama Inferior (B: 2 y 4):} \\
+P(F_B) &= 1 - (R_2 \cdot R_4) \\
+P(F_B) &= 1 - (0,8 \cdot 0,7) = 1 - 0,56 = \mathbf{0,44} \\
+\\
+\text{Desconexión Total (Paralelo de A y B):} \\
+P(\text{Fallo}) &= P(F_A) \cdot P(F_B) \\
+P(\text{Fallo}) &= 0,72 \cdot 0,44 \\
+P(\text{Fallo}) &= \mathbf{0,3168}
+\end{aligned}
+$$
+\textbf{Finalmente la probabilidad de que el generador este completamente desconectado en este caso (disipadores en serie y paralelo) es: 0,3168} \\
+
+\section*{Ejercicio 2}
+
+\textbf{Datos:}
+\begin{itemize}
+    \item $M$: El alumno es menor de 30 años $\rightarrow P(M) = 2/3$.
+    \item $H$: El alumno es hombre $\rightarrow P(H) = 3/5$.
+    \item $W$: El alumno es mujer ($H^c$) $\rightarrow P(W) = 1 - 3/5 = 2/5$.
+    \item $A$: Ser mujer o tener al menos 30 años $\rightarrow P(W \cup M^c) = 5/8$. \\
+\end{itemize}
+Se busca obtener la probabilidad de que el delegado elegido sea mujer y menor de 30 años, lo cual se puede escribir como: $P(W \cap M)$. \\
+Sabemos que el evento contrario a que el delegado sea mujer o mayor es que este sea Hombre y Menor, entonces:
+$$
+\begin{aligned}
+P(W \cup M^c) &= 5/8 \\
+P((W \cup M^c)^c) &= 1 - 5/8 \\
+P(H \cap M) &= \mathbf{\frac{3}{8}}
+\end{aligned}
+$$
+La probabilidad de que el delegado sea hombre y menor de 30 años es 3/8. \\
+El evento $M$ (ser menor de 30) se compone de dos grupos disjuntos: los hombres menores y las mujeres menores, esto se puede escribe de la siguiente manera:
+$$ P(M) = P(H \cap M) + P(W \cap M) $$
+
+Sustituyendo los valores conocidos en la ecuacion llegamos a la probabilidad pedida:
+$$ \frac{2}{3} = \frac{3}{8} + P(W \cap M) $$
+$$
+\begin{aligned}
+P(W \cap M) &= \frac{2}{3} - \frac{3}{8} \\
+P(W \cap M) &= \frac{16}{24} - \frac{9}{24} \\
+P(W \cap M) &= \mathbf{\frac{7}{24}}
+\end{aligned}
+$$
+\textbf{Finalmente la probabilidad de que el delegado sea mujer y menor de 30 años es igual a 7/24 del total de alumnos.} \\
+
+\section*{Ejercicio 3}
+
+En ambos juegos los jugadores $A$, $B$ y $C$ juegan en ese orden, repitiendo los lanzamientos hasta que alguno obtiene el resultado ganador.
+Cada lanzamiento es independiente y la probabilidad de éxito en un turno es $p$.
+
+Para que el jugador $C$ gane en una ronda, debe ocurrir lo siguiente:
+\begin{itemize}
+\item El jugador $A$ falla.
+\item El jugador $B$ falla.
+\item El jugador $C$ tiene éxito.
+\end{itemize}
+
+La probabilidad de que esto ocurra en una ronda es
+\[
+(1-p)(1-p)p=(1-p)^2p.
+\]
+
+Sin embargo, el juego puede durar varias rondas. La probabilidad de que nadie gane
+en una ronda es $(1-p)^3$. Por lo tanto, la probabilidad de que gane $C$
+es la suma de la serie:
+\[
+P_C=(1-p)^2p\left[1+(1-p)^3+(1-p)^6+\cdots\right].
+\]
+
+Como $|(1-p)^3|<1$, esta serie converge y se obtiene
+\[
+P_C=\frac{(1-p)^2p}{1-(1-p)^3}.
+\]
+
+\textbf{Juego I:} Lanzar dos monedas.
+
+El jugador gana si obtiene dos sellos (SS). Como cada moneda tiene probabilidad
+$\frac{1}{2}$ de caer sello y los lanzamientos son independientes, se tiene
+\[
+p=P(\text{SS})=\frac{1}{2}\cdot\frac{1}{2}=\frac{1}{4}.
+\]
+
+
+Sustituyendo en la expresión general,
+\[
+P_C=\frac{\left(\frac{3}{4}\right)^2\left(\frac{1}{4}\right)}{1-\left(\frac{3}{4}\right)^3}
+=\frac{\frac{9}{64}}{1-\frac{27}{64}}
+=\frac{9}{37}\approx 0.243.
+\]
+
+\textbf{Juego II:} Lanzar dos dados y obtener suma 7.
+
+Al lanzar dos dados, los resultados posibles estan formados por $36$ resultados equiprobables. La suma es $7$ ocurre en los siguientes casos:
+\[
+(1,6),\ (2,5),\ (3,4),\ (4,3),\ (5,2),\ (6,1).
+\]
+
+Por lo tanto, existen $6$ resultados favorables de un total de $36$ posibles, y se tiene
+\[
+p=\frac{6}{36}=\frac{1}{6}.
+\]
+
+
+Luego,
+\[
+P_C=\frac{\left(\frac{5}{6}\right)^2\left(\frac{1}{6}\right)}{1-\left(\frac{5}{6}\right)^3}
+=\frac{\frac{25}{216}}{1-\frac{125}{216}}
+=\frac{25}{91}\approx 0.275.
+\]
+
+Entonces, dado que $0.275>0.243$, si yo fuera el jugador $C$ preferiría
+jugar el \textbf{Juego II}, ya que ofrece una mayor probabilidad de ganar.
+
+\section*{Ejercicio 4}
+\textbf {Datos:} \\
+$P(F_1) = 0.10$ \\ 
+$P(F_2) = 0.15$ \\
+$P(F_3) = 0.20$ \\
+$P(F_2 \mid F_1) = 0.5$ \\
+La falla de la componente 3 es independiente de las otras. \\
+
+Para calcular los escenarios donde participan 1 y 2, necesitamos su probabilidad conjunta:
+$$ P(F_1 \cap F_2) = P(F_1) \cdot P(F_2 \mid F_1) = 0.10 \cdot 0.5 = \mathbf{0.05} $$
+
+El sistema avisa peligro solamente cuando fallan solamente dos componentes, son tres los casos posibles:
+
+\subsection*{Caso 1: Fallan 1 y 2 (Funciona 3)}
+$$
+\begin{aligned}
+P(C_1) &= P(F_1 \cap F_2) \cdot P(F_3^c) \\
+P(C_1) &= 0.05 \cdot (1 - 0.20) \\
+P(C_1) &= 0.05 \cdot 0.80 = \mathbf{0.04}
+\end{aligned}
+$$
+
+\subsection*{Caso 2: Fallan 1 y 3 (Funciona 2)}
+$$
+\begin{aligned}
+P(C_2) &= [P(F_1) - P(F_1 \cap F_2)] \cdot P(F_3) \\
+P(C_2) &= [0.10 - 0.05] \cdot 0.20 \\
+P(C_2) &= 0.05 \cdot 0.20 = \mathbf{0.01}
+\end{aligned}
+$$
+
+\subsection*{Caso 3: Fallan 2 y 3 (Funciona 1)}
+$$
+\begin{aligned}
+P(C_3) &= [P(F_2) - P(F_1 \cap F_2)] \cdot P(F_3) \\
+P(C_3) &= [0.15 - 0.05] \cdot 0.20 \\
+P(C_3) &= 0.10 \cdot 0.20 = \mathbf{0.02}
+\end{aligned}
+$$
+Para saber la probabilidad de que el sistema avise peligro sumamos las probabilidades de los tres casos, los cuales son disjuntos:
+$$
+\begin{aligned}
+P(\text{Peligro}) &= P(C_1) + P(C_2) + P(C_3) \\
+P(\text{Peligro}) &= 0.04 + 0.01 + 0.02 = \mathbf{0.07}
+\end{aligned}
+$$
+\textbf{Finalmente la probabilidad de que el sistema avise peligro es igual a 0,07} \\
+
+\section*{Ejercicio 5}
+
+Sea $X$ la suma de los dedos mostrados. La ganancia del jugador depende de la paridad
+de $X$: si $X$ es par, el jugador gana $X$ unidades monetarias; si $X$ es impar,
+pierde $X$ unidades monetarias. Denotamos por $G$ la ganancia del jugador.
+
+\bigskip
+
+\textbf{a)} Se supone que el oponente muestra 1 o 2 dedos con igual probabilidad.
+
+\bigskip
+
+\underline{Si el jugador muestra 1 dedo:}
+
+\begin{itemize}
+    \item Si el oponente muestra 1 dedo, entonces $X=2$ y la ganancia es $+2$.
+    \item Si el oponente muestra 2 dedos, entonces $X=3$ y la ganancia es $-3$.
+\end{itemize}
+
+Por lo tanto la esperanza es,
+\[
+E(G_1)=\frac{1}{2}(2)+\frac{1}{2}(-3)=-\frac{1}{2}.
+\]
+
+\bigskip
+
+\underline{Si el jugador muestra 2 dedos:}
+
+\begin{itemize}
+    \item Si el oponente muestra 1 dedo, entonces $X=3$ y la ganancia es $-3$.
+    \item Si el oponente muestra 2 dedos, entonces $X=4$ y la ganancia es $+4$.
+\end{itemize}
+
+Así,
+\[
+E(G_2)=\frac{1}{2}(-3)+\frac{1}{2}(4)=\frac{1}{2}.
+\]
+
+\bigskip
+
+Entonces, conviene mostrar 2 dedos, ya que la esperanza es positiva.
+No conviene mostrar 1 dedo ni no participar.
+
+\bigskip
+\bigskip
+
+\textbf{b)} El oponente dice que mostrará 1 dedo, pero miente con probabilidad $0.25$.
+
+\bigskip
+
+Como dice la verdad con probabilidad $0.75$, se tiene
+\[
+P(\text{muestra 1})=0.75, \qquad P(\text{muestra 2})=0.25.
+\]
+
+\bigskip
+
+\underline{Si el jugador muestra 1 dedo:}
+
+\[
+E(G_1)=0.75(2)+0.25(-3)=0.75.
+\]
+
+\bigskip
+
+\underline{Si el jugador muestra 2 dedos:}
+
+\[
+E(G_2)=0.75(-3)+0.25(4)=-1.25.
+\]
+
+\bigskip
+
+Entonces, con esta nueva información conviene jugar y mostrar
+\textbf{1 dedo}, ya que es la única opción con esperanza positiva.
+
+\section*{Ejercicio 6}
+
+La variable aleatoria $T$ representa la duración de un componente y tiene función
+de distribución acumulada
+\[
+F_T(t)=
+\begin{cases}
+0, & t<0,\\[6pt]
+1-ae^{-\lambda t}-(1-a)e^{-\mu t}, & t\ge 0,
+\end{cases}
+\]
+donde $0<a\le 1$, $\lambda>0$ y $\mu>0$.
+
+\bigskip
+
+\textbf{a) Función de densidad}
+
+La función de densidad se consigue derivando la función de distribución:
+\[
+f_T(t)=F'_T(t).
+\]
+
+Por lo tanto,
+\[
+f_T(t)=
+\begin{cases}
+0, & t<0,\\[6pt]
+a\lambda e^{-\lambda t}+(1-a)\mu e^{-\mu t}, & t\ge 0.
+\end{cases}
+\]
+
+\bigskip
+
+\textbf{b) Función generadora de momentos}
+
+La función generadora de momentos de una variable exponencial con parametro
+$\alpha$ es
+\[
+M(s)=\frac{\alpha}{\alpha-s},\qquad s<\alpha.
+\]
+
+Dado que $T$ es una mezcla de dos distribuciones exponenciales, su función
+generadora de momentos es
+\[
+M_T(s)=a\frac{\lambda}{\lambda-s}+(1-a)\frac{\mu}{\mu-s},
+\qquad s<\min(\lambda,\mu).
+\]
+
+\textbf{c) Esperanza y varianza}
+
+Usando las propiedades de la mezcla,
+\[
+E(T)=a\frac{1}{\lambda}+(1-a)\frac{1}{\mu},
+\]
+
+\[
+E(T^2)=a\frac{2}{\lambda^2}+(1-a)\frac{2}{\mu^2}.
+\]
+
+Entonces al final se obtiene,
+\[
+\operatorname{Var}(T)=E(T^2)-[E(T)]^2.
+\]
+
+\end{document}
