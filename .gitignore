@@ -1,0 +1,18 @@
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.dvi
+*.bbl
+*.blg
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# --- Editores ---
+.vscode/
